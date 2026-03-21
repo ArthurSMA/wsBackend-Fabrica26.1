@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'grid_style.css' %}">
+    <title>F1 - Resultado da Sessão</title>
+
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>🏁 RESULTADO DA SESSÃO</h1>
+        <p>Session Key: {{ grid.0.session_key }} | Meeting: {{ grid.0.meeting_key }}</p>
+    </div>
+
+    <div class="grid-container">
+        {% for item in grid %}
+        <div class="row" style="border-left: 6px solid #{{ item.team_colour|default:'333' }}">
+
+            <div class="pos">
+                {% if item.position %} {{ item.position }}º {% else %} -- {% endif %}
+            </div>
+
+            <img src="{{ item.headshot_url|default:'https://www.formula1.com/etc/designs/fom-website/images/svg/f1-logo.svg' }}"
+                alt="{{ item.full_name }}" class="driver-img">
+
+            <div class="info">
+                <span class="name">
+                    {{ item.full_name|default:"Piloto Desconhecido" }}
+                    <small style="color:#999">#{{ item.driver_number }}</small>
+
+                    {% if item.dnf %}<span class="status-badge dnf">Não Finalizou (DNF)</span>{% endif %}
+                    {% if item.dns %}<span class="status-badge dnf">Não Largou (DNS)</span>{% endif %}
+                </span>
+                <span class="team">{{ item.team_name|default:"Independente" }}</span>
+            </div>
+
+            <div class="stats">
+                <span class="laps">{{ item.number_of_laps }} voltas</span>
+                {% if item.points > 0 %}
+                <span class="pts">+{{ item.points }} PTS</span>
+                {% endif %}
+            </div>
+
+        </div>
+        {% empty %}
+        <div class="row">
+            <p>Nenhum dado disponível para esta sessão.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+</body>
+
+</html>

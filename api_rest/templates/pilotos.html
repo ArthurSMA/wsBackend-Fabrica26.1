@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <title>F1 Standings 2026</title>
+</head>
+<body>
+
+    <div class="main-container">
+        <header class="f1-header">
+            <div class="f1-logo">F1</div>
+            <h1>WORLD CHAMPIONSHIP</h1>
+            <p class="subtitle">Classificação Oficial da Sessão Atual</p>
+            <div class="red-line"></div>
+        </header>
+
+        <div class="grid-layout">
+            {% for piloto in pilotos %}
+            <div class="driver-card" style="border-left: 6px solid #{{ piloto.team_colour|default:'333' }};">
+                <div class="card-content">
+                    
+                    <div class="position-box">
+                        {{ piloto.position_current }}º
+                    </div>
+
+                    <div class="driver-img-box">
+                        <img src="{{ piloto.headshot_url|default:'https://www.formula1.com/etc/designs/fom-website/images/svg/f1-logo.svg' }}" 
+                             alt="{{ piloto.full_name }}">
+                    </div>
+
+                    <div class="driver-details">
+                        <span class="team-label">{{ piloto.team_name|upper }}</span>
+                        <h2 class="driver-name">
+                            <span class="first-name">{{ piloto.first_name }}</span> 
+                            <strong>{{ piloto.last_name|upper }}</strong>
+                        </h2>
+                    </div>
+
+                    <div class="points-section">
+                        <div class="points-total">
+                            <span class="val">{{ piloto.points_current }}</span>
+                            <span class="unit">PTS</span>
+                        </div>
+                        {% if piloto.points_gained > 0 %}
+                        <div class="points-gain">+{{ piloto.points_gained }} na sessão</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p class="no-data">Dados de campeonato indisponíveis para esta sessão.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+</body>
+</html>

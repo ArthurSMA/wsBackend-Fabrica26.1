@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'auth.css' %}">
+    <title>F1 - Login</title>
+</head>
+
+<body>
+    <div class="auth-page-wrapper">
+
+        <div class="main-container auth-center">
+            <header class="f1-header">
+                <div class="f1-logo">F1</div>
+                <h1>World Championship</h1>
+            </header>
+
+            <div class="auth-card">
+                <div class="card-header-line"></div>
+
+                <div class="auth-content">
+                    <h2>ACESSAR CONTA</h2>
+
+                    {% if error %}
+                    <div class="error-container">
+                        <ul>
+                            <li>{{ error }}</li>
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    <form method="POST" action="{% url 'login-usuario' %}" class="f1-form">
+                        {% csrf_token %}
+
+                        <div class="input-group">
+                            <label for="email">E-mail</label>
+                            <input type="email" id="email" name="email" required placeholder="seu@email.com">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="senha">Senha</label>
+                            <input type="password" id="senha" name="senha" required placeholder="Sua senha">
+                        </div>
+
+                        <button type="submit" class="btn-primary">ENTRAR</button>
+                    </form>
+
+                    <div class="auth-footer">
+                        <span>Não possui um login?</span>
+                        <a href="{% url 'cadastro-usuario' %}" class="btn-secondary">EFETUAR CADASTRO</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>

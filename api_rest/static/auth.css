@@ -1,0 +1,162 @@
+/* Centralização Total na Tela */
+body {
+    background-color: #f3f3f3;
+    font-family: 'Segoe UI', Roboto, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Container que limita a largura do Card */
+.main-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.auth-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* --- CABEÇALHO --- */
+.f1-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.f1-logo {
+    font-weight: 900;
+    font-size: 3.5rem;
+    color: #e10600;
+    line-height: 1;
+    font-style: italic;
+}
+
+h1 {
+    margin: 0;
+    font-size: 1.4rem;
+    color: #15151e;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- O CARD BRANCO --- */
+.auth-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 100%;
+}
+
+.card-header-line {
+    height: 6px;
+    background-color: #e10600;
+}
+
+.auth-content {
+    padding: 40px;
+}
+
+.auth-content h2 {
+    text-align: center;
+    font-weight: 900;
+    margin-bottom: 25px;
+    font-style: italic;
+    color: #15151e;
+    text-transform: uppercase;
+}
+
+/* --- FORMULÁRIO E INPUTS --- */
+.f1-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.input-group label {
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #666;
+    text-transform: uppercase;
+}
+
+.input-group input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    outline: none;
+    transition: 0.2s;
+}
+
+.input-group input:focus {
+    border-color: #e10600;
+    box-shadow: 0 0 5px rgba(225, 6, 0, 0.2);
+}
+
+/* --- BOTÕES --- */
+.btn-primary {
+    background-color: #e10600;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 6px;
+    font-weight: 900;
+    cursor: pointer;
+    text-transform: uppercase;
+    margin-top: 10px;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #b80500;
+}
+
+.auth-footer {
+    margin-top: 25px;
+    text-align: center;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.auth-footer span {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.btn-secondary {
+    color: #e10600;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.btn-secondary:hover {
+    text-decoration: underline;
+}
+
+/* --- ERROS --- */
+.error-container {
+    background-color: #fdeaea;
+    border-left: 4px solid #e10600;
+    padding: 10px;
+    margin-bottom: 20px;
+    color: #b80500;
+    font-size: 0.85rem;
+}
