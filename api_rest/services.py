@@ -2,13 +2,13 @@ import requests
 from datetime import datetime
 
 class OpenF1Service:
-    BASE_URL = "https://api.openf1.org/v1/sessions"
+    BASE_URL = "https://api.openf1.org/v1"
 
     @staticmethod
     def get_proximas_corridas(limit=4):
         # Busca as próximas corridas de 2026
-        url = f"{OpenF1Service.BASE_URL}?session_name=Race&year=2026"
-        
+        url = f"{OpenF1Service.BASE_URL}/sessions?session_name=Race&year=2026"
+
         try:
             response = requests.get(url, timeout=10)
             response.raise_for_status()
@@ -28,4 +28,16 @@ class OpenF1Service:
 
         except Exception as e:
             print(f"Erro ao buscar próximas corridas: {e}")
+            return []
+
+    @staticmethod
+    def listar_pilotos():
+        url = f"{OpenF1Service.BASE_URL}/drivers"
+        try:
+            response = requests.get(url, timeout=10)
+            response.raise_for_status()
+            pilotos = response.json()
+            return pilotos
+        except Exception as e:
+            print(f"Erro ao buscar pilotos: {e}")
             return []
