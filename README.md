@@ -1,30 +1,44 @@
 # wsBackend-Fabrica26.1
 
-### Rodar projeto
+## Como Rodar o Projeto
+Siga os passos a baixo:
+(Bash)
+```bash
+#1. Crie um ambiente virtual
+python -m venv venv
 
-Em terminal bash
+#2. Ativar o modo ambiente virtual
+source venv/Scripts/activate
 
-```bash
-#1. Criar o ambiente virtual
-py -m venv venv 
-```
-```bash
-#2. Ativar o ambiente virtual
-source .\venv\Scripts\activate
-```
-```bash
-#3. Instalar dependências
+# 3. Instalar dependências
 pip install -r requirements.txt
 
-#4. Rodar as migrações e o servidor
+# 4. Rodar as migrações e o servidor
 python manage.py migrate
 python manage.py runserver
 ```
 
-#### ENDPOINTS
+## ENDPOINTs da Aplicação
+
+| Recurso              | Rota              | Nome da URL          |
+|----------------------|-------------------|----------------------|
+| Login                | /login/           | login                |
+| Cadastro             | /cadastro/        | cadastro-usuario     |
+| Grid de Resultados   | /grid-resultado/  | pagina-grid-resultado|
+| Página de Pilotos    | /pilotos/         | pagina-campeonato    |
+
+#### ENDPOINTS LINK
+Login
+- /login/
+[Login](http://127.0.0.1:8000/login/)
+
+Cadastro
+- /cadastro/
+[Cadastro](http://127.0.0.1:8000/cadastro/)
+
 Lista de usuários
 - api/usuarios/
-[Lista de Usuários]('http://127.0.0.1:8000/api/usuarios/')
+[Lista de Usuários]('/api/usuarios/')
 
 Criar usuário
 [Criar usuário]('http://127.0.0.1:8000/api/cadastro-usuario/')
