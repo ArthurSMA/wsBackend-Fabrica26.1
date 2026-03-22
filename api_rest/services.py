@@ -52,20 +52,24 @@ class OpenF1Service:
 
     @staticmethod
     def listar_campeonato_detalhado():
-        drivers_url = f"{OpenF1Service.BASE_URL}/drivers?session_key=latest"
-        drivers_data = requests.get(drivers_url).json()
+        try:
+            drivers_url = f"{OpenF1Service.BASE_URL}/drivers?session_key=latest"
+            drivers_data = requests.get(drivers_url, timeout=5).json()
 
-        standings_url = f"{OpenF1Service.BASE_URL}/championship_drivers?session_key=latest" 
-        standings_data = requests.get(standings_url).json()
+            standings_url = f"{OpenF1Service.BASE_URL}/championship_drivers?session_key=latest" 
+            standings_data = requests.get(standings_url, timeout=5).json()
 
-        pontos_map = {item['driver_number']: item for item in standings_data}
-        
-        grid_completo = []
-        for driver in drivers_data:
-            num = driver['driver_number']
-            if num in pontos_map:
-                driver['points_current'] = pontos_map[num].get('points_current', 0)
-                driver['position_current'] = pontos_map[num].get('position_current', '-')
-                driver['points_current'] = pontos_map[num].get('points_current', 0) - pontos_map[num].get('points_previous', 0)
-                grid_completo.append(driver)
-        return sorted(grid_completo, key=lambda x: x.get('points_current', 999), reverse=True)
+            pontos_map = {item['driver_number']: item for item in standings_data}
+            
+            grid_completo = []
+            for driver in drivers_data:
+                num = driver.get('driver_number')
+                if num in pontos_map:
+                    driver['position_current'] = pontos_map[num].get('position_current', '-')
+                    driver['points_total'] = pontos_map[num].get('points_current', 0)
+                    grid_completo.append(driver)
+
+            return sorted(grid_completo, key=lambda x: x.get('position_current', 999))
+        except Exception as e:
+            print(f"Erro ao processar campeonato: {e}")
+            return []

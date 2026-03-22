@@ -32,7 +32,7 @@
                     </div>
                     {% endif %}
 
-                    <form method="POST" action="{% url 'login-usuario' %}" class="f1-form">
+                    <form method="POST" action="{% url 'api-login' %}" class="f1-form">
                         {% csrf_token %}
 
                         <div class="input-group">
@@ -41,8 +41,8 @@
                         </div>
 
                         <div class="input-group">
-                            <label for="senha">Senha</label>
-                            <input type="password" id="senha" name="senha" required placeholder="Sua senha">
+                            <label for="password">Senha</label> <input type="password" id="password" name="password"
+                                required placeholder="Sua senha">
                         </div>
 
                         <button type="submit" class="btn-primary">ENTRAR</button>

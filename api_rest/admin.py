@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Aposta, ContaFinanceira # O nome aqui deve ser igual ao do models.py
+from .models import Piloto, EscolhaPiloto, ContaFinanceira
 
-admin.site.register(Aposta)
+admin.site.register(Piloto)
+admin.site.register(EscolhaPiloto)
 admin.site.register(ContaFinanceira)

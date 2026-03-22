@@ -38,9 +38,15 @@
                         {% csrf_token %}
 
                         <div class="input-group">
-                            <label for="nome">Nome</label>
-                            <input type="text" id="nome" name="nome" value="{{ dados_preenchidos.nome|default:'' }}"
-                                required placeholder="Seu nome">
+                            <label for="username">Nome de Usuário</label> <input type="text" id="username"
+                                name="username" value="{{ dados_preenchidos.username|default:'' }}" required
+                                placeholder="Ex: arthur_dev">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="first_name">Nome Completo</label>
+                            <input type="text" id="first_name" name="first_name"
+                                value="{{ dados_preenchidos.first_name|default:'' }}" required placeholder="Seu nome">
                         </div>
 
                         <div class="input-group">
@@ -50,8 +56,8 @@
                         </div>
 
                         <div class="input-group">
-                            <label for="senha">Senha</label>
-                            <input type="password" id="senha" name="senha" required placeholder="Sua senha">
+                            <label for="password">Senha</label> <input type="password" id="password" name="password"
+                                required placeholder="Sua senha">
                         </div>
 
                         <button type="submit" class="btn-primary">CADASTRAR</button>
