@@ -41,24 +41,36 @@ O servidor rodará em: http://127.0.0.1:8000/
 
 ## 🐳 Como rodar com Docker
 
+Para rodar a aplicação em um ambiente isolado utilizando a imagem **Python 3.13-slim** configurada no projeto, siga os passos abaixo:
+
 ### 1. Construir a Imagem (Build)
+Compila e instala as dependências dentro da imagem:
 ```bash
 docker build -t f1-backend .
 ```
-### 2. Rodar o container
+### 2. Iniciar o Container
+
 ```bash
 docker run -d -p 8000:8000 --name f1-app f1-backend
 ```
-### 3. Executar migração dentro do Container
+### 3.Configurar o Banco de Dados (Migrations)
 ```bash
-# Rodar Migrations
+# Criar as tabelas (Usuários, Votos, Saldo)
 docker exec -it f1-app python manage.py migrate
 
-# Criar Superusuário (Opcional)
+# Criar um Superusuário (Opcional - para acessar o /admin)
 docker exec -it f1-app python manage.py createsuperuser
 ```
-
 ---
+## Comandos de manutenção
+|Ação                | Comando               |
+| ---                | ---                   |
+| Ver log            | docker logs -f f1-app |
+| Parar servidor     | docker stop f1-app    |
+| Reiniciar Servidor | docker start f1-app   |
+| Remover Container  | docker rm -f f1-app   |
+| Verificar Status   | docker ps             |
+--- 
 
 ## 🛣️ Endpoints
 
