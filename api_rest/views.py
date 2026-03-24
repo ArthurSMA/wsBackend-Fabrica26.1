@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from django.contrib.auth import authenticate, login
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.utils.decorators import method_decorator
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -25,6 +27,11 @@ class LoginView(View):
     def get(self, request):
         return render(request, 'auth/login.html')
 
+class LogoutView(View):
+    def post(self, request):
+        logout(request)
+        return redirect('login')
+
 class CadastroView(View):
     def get(self, request):
         return render(request, 'auth/cadastro.html')
@@ -40,27 +47,45 @@ class CampeonatoView(View):
         if not request.user.is_authenticated:
             return redirect('login')
         
-        dados = OpenF1Service.listar_campeonato_detalhado()
-        return render(request, 'campeonato.html', {'pilotos': dados})
+        dados_api = OpenF1Service.listar_campeonato_detalhado()
+
+        conta = getattr(request.user, 'conta', None)
+
+        escolha = EscolhaPiloto.objects.filter(usuario = request.user).select_related('piloto').last()
+
+        context = {
+            'pilotos': dados_api,
+            'saldo': conta.saldo if conta else 0.00,
+            'meu_favorito': escolha.piloto if escolha else None,
+            'data_voto': escolha.data_voto if escolha else None
+        }
+
+        return render(request, 'campeonato.html', context)
 
 #3. Lógica de voto
 class VotarPilotoView(PrivateAPIView):
     def post(self, request):
-        piloto_id = request.data.get('piloto_id')
-        piloto = get_object_or_404(Piloto, id=piloto_id)
+        valor_voto = request.data.get('piloto_id')
+        user = request.user
 
-        voto, created = EscolhaPiloto.objects.get_or_create(
-            usuario=request.user,
-            piloto=piloto
+        piloto, created = Piloto.objects.get_or_create(
+            numero_carro = valor_voto,
+            defaults={'nome': 'Piloto ' + str(valor_voto)}
         )
 
-        if self._is_html(request):
-            return redirect('pagina-campeonato')
+        conta = getattr(user, 'conta', None)
+        if not conta or conta.saldo < 10:
+            return Response({"error": "Saldo insuficiente"}, status=400)
         
-        return Response({"status": "voto registrado"}, status=status.HTTP_201_CREATED)
-    
-    def _is_html(self, request):
-        return 'text/html' in request.META.get('HTTP_ACCEPT', '')
+        EscolhaPiloto.objects.update_or_create(
+            usuario = user,
+            defaults={'piloto': piloto}
+        )
+
+        conta.saldo -= 10
+        conta.save()
+
+        return redirect('/pilotos/')
 
 class GridResultadoView(PrivateAPIView):
     login_url = '/login/'
@@ -76,6 +101,7 @@ class GridResultadoView(PrivateAPIView):
 
         return render(request, 'grid_resultado.html', {'grid': grid_processado})
 
+@method_decorator(csrf_exempt, name='dispatch')
 class UsuarioCadastroView(PublicAPIView):
     def post(self, request):
         serializer = UsuarioSerializer(data=request.data)
@@ -89,7 +115,6 @@ class UsuarioCadastroView(PublicAPIView):
             return render(request, 'auth/cadastro.html', {'erros': serializer.errors})
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    # ESTA FUNÇÃO PRECISA ESTAR AQUI DENTRO (IDENTADA)
     def _is_html(self, request):
         return 'text/html' in request.META.get('HTTP_ACCEPT', '')
 
@@ -126,4 +151,24 @@ class UsuarioLoginView(PublicAPIView):
 
     def _is_html(self, request):
         return 'text/html' in request.META.get('HTTP_ACCEPT', '')
-    
+
+class UsuarioGerenciamentoView(PrivateAPIView):
+    # Listar
+    def get(self, request):
+        usuario = User.objects.all()
+        serializer = UsuarioSerializer(usuario, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # Editar
+    def put(self, request):
+        serializer = UsuarioSerializer(request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    # Remover
+    def delete(self, request):
+        usuario = request.user
+        usuario.delete()
+        return Response({"message": "Sua conta foi removida com sucesso."}, status=status.HTTP_204_NO_CONTENT)

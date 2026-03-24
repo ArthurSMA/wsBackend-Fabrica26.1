@@ -1,77 +1,66 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'auth.css' %}">
     <title>F1 - Cadastro</title>
 </head>
-
 <body>
-    <div class="auth-page-wrapper">
+    <div class="main-container">
+        <header class="f1-header">
+            <div class="f1-logo">F1</div>
+            <h1>World Championship</h1>
+        </header>
 
-        <div class="main-container auth-center">
-            <header class="f1-header">
-                <div class="f1-logo">F1</div>
-                <h1>World Championship</h1>
-            </header>
+        <div class="auth-card">
+            <div class="card-header-line"></div>
+            <div class="auth-content">
+                <h2>CRIAR CONTA</h2>
 
-            <div class="auth-card">
-                <div class="card-header-line"></div>
+                {% if erros %}
+                <div class="error-container">
+                    {% for field, error_list in erros.items %}
+                        {% for error in error_list %}
+                            <p><strong>{{ field|title }}:</strong> {{ error }}</p>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+                {% endif %}
 
-                <div class="auth-content">
-                    <h2>CRIAR CONTA</h2>
+                <form method="POST" action="{% url 'api-cadastro' %}" class="f1-form">
+                    {% csrf_token %}
 
-                    {% if errors %}
-                    <div class="error-container">
-                        <ul>
-                            {% for field, error_list in errors.items %}
-                            {% for error in error_list %}<li>{{ error }}</li>{% endfor %}
-                            {% endfor %}
-                        </ul>
+                    <div class="input-group">
+                        <label for="username">Usuário</label>
+                        <input type="text" id="username" name="username" required placeholder="Ex: arthur_f1">
                     </div>
-                    {% endif %}
 
-                    <form method="POST" action="{% url 'api-cadastro' %}" class="f1-form">
-                        {% csrf_token %}
-
-                        <div class="input-group">
-                            <label for="username">Nome de Usuário</label> <input type="text" id="username"
-                                name="username" value="{{ dados_preenchidos.username|default:'' }}" required
-                                placeholder="Ex: arthur_dev">
-                        </div>
-
-                        <div class="input-group">
-                            <label for="first_name">Nome Completo</label>
-                            <input type="text" id="first_name" name="first_name"
-                                value="{{ dados_preenchidos.first_name|default:'' }}" required placeholder="Seu nome">
-                        </div>
-
-                        <div class="input-group">
-                            <label for="email">E-mail</label>
-                            <input type="email" id="email" name="email" value="{{ dados_preenchidos.email|default:'' }}"
-                                required placeholder="seu@email.com">
-                        </div>
-
-                        <div class="input-group">
-                            <label for="password">Senha</label> <input type="password" id="password" name="password"
-                                required placeholder="Sua senha">
-                        </div>
-
-                        <button type="submit" class="btn-primary">CADASTRAR</button>
-                    </form>
-
-                    <div class="auth-footer">
-                        <span>Já tem uma conta?</span>
-                        <a href="{% url 'login' %}" class="btn-secondary">FAZER LOGIN</a>
+                    <div class="input-group">
+                        <label for="first_name">Nome Completo</label>
+                        <input type="text" id="first_name" name="first_name" required placeholder="Seu nome">
                     </div>
+
+                    <div class="input-group">
+                        <label for="email">E-mail</label>
+                        <input type="email" id="email" name="email" required placeholder="seu@email.com">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="password">Senha</label>
+                        <input type="password" id="password" name="password" required placeholder="••••••••">
+                    </div>
+
+                    <button type="submit" class="btn-primary">FINALIZAR CADASTRO</button>
+                </form>
+
+                <div class="auth-footer">
+                    <span>Já é da nossa equipe?</span>
+                    <a href="{% url 'login' %}" class="btn-secondary">FAZER LOGIN</a>
                 </div>
             </div>
         </div>
-
     </div>
 </body>
-
 </html>

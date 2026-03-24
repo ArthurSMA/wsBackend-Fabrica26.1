@@ -59,13 +59,15 @@ class OpenF1Service:
             standings_url = f"{OpenF1Service.BASE_URL}/championship_drivers?session_key=latest" 
             standings_data = requests.get(standings_url, timeout=5).json()
 
-            pontos_map = {item['driver_number']: item for item in standings_data}
+            pontos_map = {int(item['driver_number']): item for item in standings_data}
             
             grid_completo = []
             for driver in drivers_data:
-                num = driver.get('driver_number')
+                num = int(driver.get('driver_number'))
+                
                 if num in pontos_map:
-                    driver['position_current'] = pontos_map[num].get('position_current', '-')
+                    driver['driver_number'] = num
+                    driver['position_current'] = pontos_map[num].get('position_current', 99)
                     driver['points_total'] = pontos_map[num].get('points_current', 0)
                     grid_completo.append(driver)
 
